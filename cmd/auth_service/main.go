@@ -5,6 +5,7 @@ import (
 	`log/slog`
 	`os`
 
+	`github.com/dugtriol/auth-service/internal/app`
 	`github.com/dugtriol/auth-service/internal/config`
 )
 
@@ -23,6 +24,8 @@ func main() {
 	log := setupLogger(envLocal)
 	log.Info("starting application")
 	// TODO: app initialization
+	application := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.TokenTTL)
+	application.GRPCServer.MustRun()
 
 }
 
