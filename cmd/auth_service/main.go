@@ -25,7 +25,6 @@ func main() {
 
 	log := setupLogger(envLocal)
 	log.Info("starting application")
-	// TODO: app initialization
 	application := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.TokenTTL)
 	go application.GRPCServer.MustRun()
 
