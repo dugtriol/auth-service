@@ -5,7 +5,7 @@ import (
 	`log/slog`
 	`net`
 
-	authgrpc `github.com/dugtriol/auth-service/internal/grpc/auth`
+	`github.com/dugtriol/auth-service/internal/grpc/authgrpc`
 	`google.golang.org/grpc`
 )
 
