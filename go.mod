@@ -4,7 +4,9 @@ go 1.23.1
 
 require (
 	github.com/dugtriol/auth-protos v0.0.3
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/ilyakaznacheev/cleanenv v1.5.0
+	golang.org/x/crypto v0.24.0
 	google.golang.org/grpc v1.66.0
 )
 
