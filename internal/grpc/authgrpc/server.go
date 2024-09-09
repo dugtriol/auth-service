@@ -18,6 +18,12 @@ type Auth interface {
 		password string,
 		appID int,
 	) (token string, err error)
+	RegisterNewUser(
+		ctx context.Context,
+		email string,
+		password string,
+	) (userID int64, err error)
+	IsAdmin(ctx context.Context, userID int64) (bool, error)
 }
 
 type serverAPI struct {
@@ -55,9 +61,32 @@ func (s *serverAPI) Login(ctx context.Context, req *authv1.LoginRequest) (*authv
 }
 
 func (s *serverAPI) Register(ctx context.Context, req *authv1.RegisterRequest) (*authv1.RegisterResponse, error) {
-	panic("")
+	if req.Email == "" {
+		return nil, status.Error(codes.InvalidArgument, "email is required")
+	}
+
+	if req.Password == "" {
+		return nil, status.Error(codes.InvalidArgument, "password is required")
+	}
+
+	uid, err := s.auth.RegisterNewUser(ctx, req.GetEmail(), req.GetPassword())
+	if err != nil {
+		return nil, status.Error(codes.Internal, "failed to register user")
+	}
+
+	return &authv1.RegisterResponse{UserId: uid}, nil
 }
 
 func (s *serverAPI) IsAdmin(ctx context.Context, req *authv1.IsAdminRequest) (*authv1.IsAdminResponse, error) {
-	panic("")
+	if req.UserId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "user_id is required")
+	}
+
+	isAdmin, err := s.auth.IsAdmin(ctx, req.GetUserId())
+	if err != nil {
+
+		return nil, status.Error(codes.Internal, "failed to check admin status")
+	}
+
+	return &authv1.IsAdminResponse{IsAdmin: isAdmin}, nil
 }
