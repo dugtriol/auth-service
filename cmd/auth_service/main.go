@@ -4,6 +4,8 @@ import (
 	`fmt`
 	`log/slog`
 	`os`
+	`os/signal`
+	`syscall`
 
 	`github.com/dugtriol/auth-service/internal/app`
 	`github.com/dugtriol/auth-service/internal/config`
@@ -25,8 +27,14 @@ func main() {
 	log.Info("starting application")
 	// TODO: app initialization
 	application := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.TokenTTL)
-	application.GRPCServer.MustRun()
+	go application.GRPCServer.MustRun()
 
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)
+	<-stop
+
+	application.GRPCServer.Stop()
+	log.Info("Gracefully stopped")
 }
 
 func setupLogger(env string) *slog.Logger {
