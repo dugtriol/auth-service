@@ -1,20 +1,26 @@
-package migrator
+package main
 
 import (
 	`errors`
-	`flag`
 	`fmt`
 
 	`github.com/golang-migrate/migrate/v4`
+	_ "github.com/golang-migrate/migrate/v4/database/sqlite3"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
+)
+
+const (
+	storagePath    = "./service.db"
+	migrationsPath = "./migrations"
 )
 
 func main() {
-	var storagePath, migrationsPath, migrationsTable string
+	var migrationsTable string
 
-	flag.StringVar(&storagePath, "storage-path", "", "path to storage")
-	flag.StringVar(&migrationsPath, "migrations-path", "", "path to migrations")
-	flag.StringVar(&migrationsTable, "migrations-table", "migrations", "name of migrations table")
-	flag.Parse()
+	//flag.StringVar(&storagePath, "storage-path", "", "path to storage")
+	//flag.StringVar(&migrationsPath, "migrations-path", "", "path to migrations")
+	//flag.StringVar(&migrationsTable, "migrations-table", "migrations", "name of migrations table")
+	//flag.Parse()
 
 	if storagePath == "" {
 		panic("storage-path is required")

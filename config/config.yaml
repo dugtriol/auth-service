@@ -1,5 +1,5 @@
 env: "local"
-storage_path: "./storage/service.db"
+storage_path: "./service.db"
 token_ttl: 1h
 grpc:
   port: 44044
